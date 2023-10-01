@@ -3,6 +3,9 @@
       "target": "ES6",
       "module": "CommonJS",
       "outDir": "./dist",
+      "noEmitOnError": false,
+      "declaration": true,
+      "declarationDir": "./dist/types",
       "strict": true,
       "esModuleInterop": true
     },

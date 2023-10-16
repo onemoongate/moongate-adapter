@@ -1,6 +1,6 @@
 import type { SendTransactionOptions, WalletName } from "@solana/wallet-adapter-base";
 import { BaseMessageSignerWalletAdapter, WalletReadyState } from "@solana/wallet-adapter-base";
-import { Connection, Transaction, TransactionSignature } from "@solana/web3.js";
+import { Connection, Transaction, TransactionSignature, VersionedTransaction } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 export declare const MoongateWalletName: WalletName<"MoonGate">;
 export declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
@@ -20,6 +20,7 @@ export declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapte
     connect(): Promise<void>;
     disconnect(): Promise<void>;
     sendTransaction(transaction: Transaction, connection: Connection, options?: SendTransactionOptions): Promise<TransactionSignature>;
-    signTransaction<T extends Transaction>(transaction: T): Promise<T>;
+    signTransaction<T extends Transaction | VersionedTransaction>(transaction: T): Promise<T>;
+    signAllTransactions<T extends Transaction | VersionedTransaction>(transactions: T[]): Promise<T[]>;
     signMessage(message: Uint8Array): Promise<Uint8Array>;
 }

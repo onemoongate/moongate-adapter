@@ -128,6 +128,17 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
         });
     }
+    signAllTransactions(transactions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // take an array of transactions and sign them all one by one using the signTransaction method. Wait for the result of each one before moving on to the next.
+            // log transactions
+            const signedTransactions = [];
+            for (const transaction of transactions) {
+                signedTransactions.push(yield this.signTransaction(transaction));
+            }
+            return signedTransactions;
+        });
+    }
     signMessage(message) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._wallet) {

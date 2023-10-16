@@ -18,7 +18,12 @@ import {
   WalletSignMessageError,
   WalletSignTransactionError,
 } from "@solana/wallet-adapter-base";
-import { Connection, Transaction, TransactionSignature } from "@solana/web3.js";
+import {
+  Connection,
+  Transaction,
+  TransactionSignature,
+  VersionedTransaction,
+} from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import { MoonGateEmbed } from "@moongate/solana-wallet-sdk";
 export const MoongateWalletName = "Ethereum Wallet" as WalletName<"MoonGate">;
@@ -127,7 +132,9 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     }
   }
 
-  async signTransaction<T extends Transaction>(transaction: T): Promise<T> {
+  async signTransaction<T extends Transaction | VersionedTransaction>(
+    transaction: T
+  ): Promise<T> {
     if (!this._wallet) {
       throw new WalletNotConnectedError();
     }
@@ -150,6 +157,18 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
       console.error("Error encountered during transaction signing:", error);
       throw new WalletSignTransactionError((error as Error).message);
     }
+  }
+
+  async signAllTransactions<T extends Transaction | VersionedTransaction>(
+    transactions: T[]
+  ): Promise<T[]> {
+    // take an array of transactions and sign them all one by one using the signTransaction method. Wait for the result of each one before moving on to the next.
+    // log transactions
+    const signedTransactions: T[] = [];
+    for (const transaction of transactions) {
+      signedTransactions.push(await this.signTransaction(transaction));
+    }
+    return signedTransactions;
   }
 
   async signMessage(message: Uint8Array): Promise<Uint8Array> {

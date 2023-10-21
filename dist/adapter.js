@@ -111,20 +111,40 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             if (!this._wallet) {
                 throw new wallet_adapter_base_1.WalletNotConnectedError();
             }
-            try {
-                const data = transaction
-                    .serialize({ requireAllSignatures: false, verifySignatures: false })
-                    .toString("base64");
-                const signedTransaction = yield this._wallet.sendCommand("signTransaction", {
-                    transaction: data,
-                    host: window.location.origin,
-                });
-                const finalTransaction = web3_js_1.Transaction.from(Uint8Array.from(signedTransaction));
-                return finalTransaction;
+            if ((0, wallet_adapter_base_1.isVersionedTransaction)(transaction)) {
+                const data = transaction.serialize();
+                console.log(transaction);
+                try {
+                    const signedTransaction = yield this._wallet.sendCommand("signTransaction", {
+                        transaction: data,
+                        host: window.location.origin,
+                        isVersionedTransaction: true,
+                    });
+                    const finalTransaction = web3_js_1.VersionedTransaction.deserialize(signedTransaction);
+                    return finalTransaction;
+                }
+                catch (error) {
+                    console.error("Error encountered during transaction signing:", error);
+                    throw new wallet_adapter_base_1.WalletSignTransactionError(error.message);
+                }
             }
-            catch (error) {
-                console.error("Error encountered during transaction signing:", error);
-                throw new wallet_adapter_base_1.WalletSignTransactionError(error.message);
+            else {
+                try {
+                    const data = transaction
+                        .serialize({ requireAllSignatures: false, verifySignatures: false })
+                        .toString("base64");
+                    const signedTransaction = yield this._wallet.sendCommand("signTransaction", {
+                        transaction: data,
+                        host: window.location.origin,
+                        isVersionedTransaction: false,
+                    });
+                    const finalTransaction = web3_js_1.Transaction.from(Uint8Array.from(signedTransaction));
+                    return finalTransaction;
+                }
+                catch (error) {
+                    console.error("Error encountered during transaction signing:", error);
+                    throw new wallet_adapter_base_1.WalletSignTransactionError(error.message);
+                }
             }
         });
     }

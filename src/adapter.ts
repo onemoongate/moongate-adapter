@@ -16,6 +16,7 @@ import {
   WalletReadyState,
   WalletSendTransactionError,
   WalletSignMessageError,
+  isVersionedTransaction,
   WalletSignTransactionError,
 } from "@solana/wallet-adapter-base";
 import {
@@ -138,24 +139,47 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     if (!this._wallet) {
       throw new WalletNotConnectedError();
     }
-    try {
-      const data = transaction
-        .serialize({ requireAllSignatures: false, verifySignatures: false })
-        .toString("base64");
-      const signedTransaction: any = await this._wallet.sendCommand<string>(
-        "signTransaction",
-        {
-          transaction: data,
-          host: window.location.origin,
-        }
-      );
-      const finalTransaction = Transaction.from(
-        Uint8Array.from(signedTransaction)
-      ) as T;
-      return finalTransaction;
-    } catch (error) {
-      console.error("Error encountered during transaction signing:", error);
-      throw new WalletSignTransactionError((error as Error).message);
+    if (isVersionedTransaction(transaction)) {
+      const data = transaction.serialize();
+      console.log(transaction);
+      try {
+        const signedTransaction: any = await this._wallet.sendCommand<string>(
+          "signTransaction",
+          {
+            transaction: data,
+            host: window.location.origin,
+            isVersionedTransaction: true,
+          }
+        );
+        const finalTransaction = VersionedTransaction.deserialize(
+          signedTransaction
+        ) as T;
+        return finalTransaction;
+      } catch (error) {
+        console.error("Error encountered during transaction signing:", error);
+        throw new WalletSignTransactionError((error as Error).message);
+      }
+    } else {
+      try {
+        const data = transaction
+          .serialize({ requireAllSignatures: false, verifySignatures: false })
+          .toString("base64");
+        const signedTransaction: any = await this._wallet.sendCommand<string>(
+          "signTransaction",
+          {
+            transaction: data,
+            host: window.location.origin,
+            isVersionedTransaction: false,
+          }
+        );
+        const finalTransaction = Transaction.from(
+          Uint8Array.from(signedTransaction)
+        ) as T;
+        return finalTransaction;
+      } catch (error) {
+        console.error("Error encountered during transaction signing:", error);
+        throw new WalletSignTransactionError((error as Error).message);
+      }
     }
   }
 

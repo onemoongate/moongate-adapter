@@ -10,9 +10,12 @@ export declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapte
     readonly supportedTransactionVersions: null;
     private _connecting;
     private _wallet;
+    private _position;
     private _publicKey;
     private _readyState;
-    constructor();
+    constructor(config: {
+        position: string;
+    });
     get publicKey(): PublicKey | null;
     get connecting(): boolean;
     get connected(): boolean;

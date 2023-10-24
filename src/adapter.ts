@@ -37,17 +37,21 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
   readonly supportedTransactionVersions = null;
   private _connecting: boolean;
   private _wallet: MoonGateEmbed | null;
+  private _position: string = "top-right";
   private _publicKey: PublicKey | null;
   private _readyState: WalletReadyState =
     typeof window === "undefined" || typeof document === "undefined"
       ? WalletReadyState.Unsupported
       : WalletReadyState.Loadable;
 
-  constructor() {
+  constructor(config: { position: string }) {
     super();
     this._connecting = false;
     this._wallet = null;
     this._publicKey = null;
+    if (config?.position) {
+      this._position = config.position;
+    }
   }
 
   get publicKey() {
@@ -87,6 +91,11 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
         let publicKey = new PublicKey(publicKeyData);
         this._publicKey = publicKey;
         this.emit("connect", publicKey);
+        if (this?._position) {
+          this._wallet.moveModal(this?._position);
+        } else {
+          this._wallet.moveModal();
+        }
       } else {
         throw new WalletPublicKeyError("No response from MoonGate wallet.");
       }

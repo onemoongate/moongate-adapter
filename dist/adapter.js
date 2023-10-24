@@ -64,7 +64,7 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
                     this._publicKey = publicKey;
                     this.emit("connect", publicKey);
                     if (this === null || this === void 0 ? void 0 : this._position) {
-                        this._wallet.moveModal(this._position);
+                        this._wallet.moveModal(this === null || this === void 0 ? void 0 : this._position);
                     }
                     else {
                         this._wallet.moveModal();

@@ -44,7 +44,7 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
       ? WalletReadyState.Unsupported
       : WalletReadyState.Loadable;
 
-  constructor(config: { position: string }) {
+  constructor(config?: { position?: string }) {
     super();
     this._connecting = false;
     this._wallet = null;

@@ -13,8 +13,8 @@ export declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapte
     private _position;
     private _publicKey;
     private _readyState;
-    constructor(config: {
-        position: string;
+    constructor(config?: {
+        position?: string;
     });
     get publicKey(): PublicKey | null;
     get connecting(): boolean;

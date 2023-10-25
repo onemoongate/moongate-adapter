@@ -24,6 +24,7 @@ import {
   Transaction,
   TransactionSignature,
   VersionedTransaction,
+  TransactionVersion,
 } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import { MoonGateEmbed } from "@moongate/solana-wallet-sdk";
@@ -34,7 +35,9 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
   url = "https://moongate.one";
   icon =
     "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKYXJpYS1sYWJlbD0iRXRoZXJldW0iIHJvbGU9ImltZyIKdmlld0JveD0iMCAwIDUxMiA1MTIiPjxyZWN0CndpZHRoPSI1MTIiIGhlaWdodD0iNTEyIgpyeD0iMTUlIgpmaWxsPSIjZmZmZmZmIi8+PHBhdGgKZmlsbD0iIzNDM0MzQiIgZD0ibTI1NiAzNjJ2MTA3bDEzMS0xODV6Ii8+PHBhdGgKZmlsbD0iIzM0MzQzNCIgZD0ibTI1NiA0MWwxMzEgMjE4LTEzMSA3OC0xMzItNzgiLz48cGF0aApmaWxsPSIjOEM4QzhDIiBkPSJtMjU2IDQxdjE1OGwtMTMyIDYwbTAgMjVsMTMyIDc4djEwNyIvPjxwYXRoCmZpbGw9IiMxNDE0MTQiIGQ9Im0yNTYgMTk5djEzOGwxMzEtNzgiLz48cGF0aApmaWxsPSIjMzkzOTM5IiBkPSJtMTI0IDI1OWwxMzItNjB2MTM4Ii8+PC9zdmc+";
-  readonly supportedTransactionVersions = null;
+  readonly supportedTransactionVersions: ReadonlySet<TransactionVersion> =
+    new Set(["legacy", 0]);
+
   private _connecting: boolean;
   private _wallet: MoonGateEmbed | null;
   private _position: string = "top-right";

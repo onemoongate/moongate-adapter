@@ -123,8 +123,8 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     }
   }
 
-  async sendTransaction(
-    transaction: Transaction,
+  async sendTransaction<T extends Transaction | VersionedTransaction>(
+    transaction: T,
     connection: Connection,
     options: SendTransactionOptions = {}
   ): Promise<TransactionSignature> {
@@ -153,7 +153,6 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     }
     if (isVersionedTransaction(transaction)) {
       const data = transaction.serialize();
-      console.log(transaction);
       try {
         const signedTransaction: any = await this._wallet.sendCommand<string>(
           "signTransaction",

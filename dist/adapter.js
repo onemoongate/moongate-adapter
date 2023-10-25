@@ -123,7 +123,6 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
             if ((0, wallet_adapter_base_1.isVersionedTransaction)(transaction)) {
                 const data = transaction.serialize();
-                console.log(transaction);
                 try {
                     const signedTransaction = yield this._wallet.sendCommand("signTransaction", {
                         transaction: data,

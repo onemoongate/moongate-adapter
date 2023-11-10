@@ -106,6 +106,9 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
                 throw new wallet_adapter_base_1.WalletNotConnectedError();
             }
             try {
+                if (!(0, wallet_adapter_base_1.isVersionedTransaction)(transaction)) {
+                    transaction = (yield this.prepareTransaction(transaction, connection, options));
+                }
                 const signedTx = yield this.signTransaction(transaction);
                 signature = yield connection.sendRawTransaction(signedTx.serialize(), options);
                 return signature;

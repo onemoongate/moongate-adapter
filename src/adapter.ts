@@ -133,6 +133,13 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
       throw new WalletNotConnectedError();
     }
     try {
+      if (!isVersionedTransaction(transaction)) {
+        transaction = (await this.prepareTransaction(
+          transaction,
+          connection,
+          options
+        )) as T;
+      }
       const signedTx = await this.signTransaction(transaction);
       signature = await connection.sendRawTransaction(
         signedTx.serialize(),

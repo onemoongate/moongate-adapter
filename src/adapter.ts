@@ -45,7 +45,7 @@ export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
   private _readyState: WalletReadyState =
     typeof window === "undefined" || typeof document === "undefined"
       ? WalletReadyState.Unsupported
-      : WalletReadyState.Loadable;
+      : WalletReadyState.Installed;
 
   constructor(config?: { position?: string }) {
     super();

@@ -25,7 +25,7 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
         this._position = "top-right";
         this._readyState = typeof window === "undefined" || typeof document === "undefined"
             ? wallet_adapter_base_1.WalletReadyState.Unsupported
-            : wallet_adapter_base_1.WalletReadyState.Loadable;
+            : wallet_adapter_base_1.WalletReadyState.Installed;
         this._connecting = false;
         this._wallet = null;
         this._publicKey = null;

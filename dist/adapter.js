@@ -13,7 +13,7 @@ exports.MoongateWalletAdapter = exports.MoongateWalletName = void 0;
 const wallet_adapter_base_1 = require("@solana/wallet-adapter-base");
 const web3_js_1 = require("@solana/web3.js");
 const web3_js_2 = require("@solana/web3.js");
-const solana_wallet_sdk_1 = require("@moongate/solana-wallet-sdk");
+const moongate_solana_wallet_sdk_1 = require("@anishde12020/moongate-solana-wallet-sdk");
 exports.MoongateWalletName = "Ethereum Wallet";
 class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalletAdapter {
     constructor(config) {
@@ -55,7 +55,7 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
             this._connecting = true;
             try {
-                this._wallet = new solana_wallet_sdk_1.MoonGateEmbed();
+                this._wallet = new moongate_solana_wallet_sdk_1.MoonGateEmbed();
                 const publicKeyData = yield this._wallet.sendCommand("login", {
                     host: window.location.origin,
                 });

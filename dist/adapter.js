@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,24 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MoongateWalletAdapter = exports.MoongateWalletName = void 0;
-const wallet_adapter_base_1 = require("@solana/wallet-adapter-base");
-const web3_js_1 = require("@solana/web3.js");
-const web3_js_2 = require("@solana/web3.js");
-const moongate_solana_wallet_sdk_1 = require("@anishde12020/moongate-solana-wallet-sdk");
-exports.MoongateWalletName = "Ethereum Wallet";
-class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalletAdapter {
+import { BaseMessageSignerWalletAdapter, WalletConnectionError, WalletDisconnectionError, WalletNotConnectedError, WalletPublicKeyError, WalletReadyState, WalletSendTransactionError, WalletSignMessageError, isVersionedTransaction, WalletSignTransactionError, } from "@solana/wallet-adapter-base";
+import { Transaction, VersionedTransaction, } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
+import { MoonGateEmbed } from "@anishde12020/moongate-solana-wallet-sdk";
+export const MoongateWalletName = "Ethereum Wallet";
+export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     constructor(config) {
         super();
-        this.name = exports.MoongateWalletName;
+        this.name = MoongateWalletName;
         this.url = "https://moongate.one";
         this.icon = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKYXJpYS1sYWJlbD0iRXRoZXJldW0iIHJvbGU9ImltZyIKdmlld0JveD0iMCAwIDUxMiA1MTIiPjxyZWN0CndpZHRoPSI1MTIiIGhlaWdodD0iNTEyIgpyeD0iMTUlIgpmaWxsPSIjZmZmZmZmIi8+PHBhdGgKZmlsbD0iIzNDM0MzQiIgZD0ibTI1NiAzNjJ2MTA3bDEzMS0xODV6Ii8+PHBhdGgKZmlsbD0iIzM0MzQzNCIgZD0ibTI1NiA0MWwxMzEgMjE4LTEzMSA3OC0xMzItNzgiLz48cGF0aApmaWxsPSIjOEM4QzhDIiBkPSJtMjU2IDQxdjE1OGwtMTMyIDYwbTAgMjVsMTMyIDc4djEwNyIvPjxwYXRoCmZpbGw9IiMxNDE0MTQiIGQ9Im0yNTYgMTk5djEzOGwxMzEtNzgiLz48cGF0aApmaWxsPSIjMzkzOTM5IiBkPSJtMTI0IDI1OWwxMzItNjB2MTM4Ii8+PC9zdmc+";
         this.supportedTransactionVersions = new Set(["legacy", 0]);
         this._position = "top-right";
         this._readyState = typeof window === "undefined" || typeof document === "undefined"
-            ? wallet_adapter_base_1.WalletReadyState.Unsupported
-            : wallet_adapter_base_1.WalletReadyState.Installed;
+            ? WalletReadyState.Unsupported
+            : WalletReadyState.Installed;
         this._connecting = false;
         this._wallet = null;
         this._publicKey = null;
@@ -51,16 +48,16 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             if (this.connected || this.connecting)
                 return;
             if (this._wallet) {
-                throw new wallet_adapter_base_1.WalletConnectionError("Already connected");
+                throw new WalletConnectionError("Already connected");
             }
             this._connecting = true;
             try {
-                this._wallet = new moongate_solana_wallet_sdk_1.MoonGateEmbed();
+                this._wallet = new MoonGateEmbed();
                 const publicKeyData = yield this._wallet.sendCommand("login", {
                     host: window.location.origin,
                 });
                 if (publicKeyData) {
-                    let publicKey = new web3_js_2.PublicKey(publicKeyData);
+                    let publicKey = new PublicKey(publicKeyData);
                     this._publicKey = publicKey;
                     this.emit("connect", publicKey);
                     if (this === null || this === void 0 ? void 0 : this._position) {
@@ -71,12 +68,12 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
                     }
                 }
                 else {
-                    throw new wallet_adapter_base_1.WalletPublicKeyError("No response from MoonGate wallet.");
+                    throw new WalletPublicKeyError("No response from MoonGate wallet.");
                 }
             }
             catch (error) {
                 console.error("Error encountered during connection:", error);
-                throw new wallet_adapter_base_1.WalletConnectionError(error.message);
+                throw new WalletConnectionError(error.message);
             }
             finally {
                 this._connecting = false;
@@ -95,7 +92,7 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
             catch (error) {
                 console.error("Error encountered during disconnection:", error);
-                throw new wallet_adapter_base_1.WalletDisconnectionError(error.message);
+                throw new WalletDisconnectionError(error.message);
             }
         });
     }
@@ -103,10 +100,10 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
         return __awaiter(this, void 0, void 0, function* () {
             let signature;
             if (!this._wallet) {
-                throw new wallet_adapter_base_1.WalletNotConnectedError();
+                throw new WalletNotConnectedError();
             }
             try {
-                if (!(0, wallet_adapter_base_1.isVersionedTransaction)(transaction)) {
+                if (!isVersionedTransaction(transaction)) {
                     transaction = (yield this.prepareTransaction(transaction, connection, options));
                 }
                 const signedTx = yield this.signTransaction(transaction);
@@ -115,16 +112,16 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
             catch (error) {
                 console.error("Error encountered during transaction submission:", error);
-                throw new wallet_adapter_base_1.WalletSendTransactionError(error.message);
+                throw new WalletSendTransactionError(error.message);
             }
         });
     }
     signTransaction(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._wallet) {
-                throw new wallet_adapter_base_1.WalletNotConnectedError();
+                throw new WalletNotConnectedError();
             }
-            if ((0, wallet_adapter_base_1.isVersionedTransaction)(transaction)) {
+            if (isVersionedTransaction(transaction)) {
                 const data = transaction.serialize();
                 try {
                     const signedTransaction = yield this._wallet.sendCommand("signTransaction", {
@@ -132,12 +129,12 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
                         host: window.location.origin,
                         isVersionedTransaction: true,
                     });
-                    const finalTransaction = web3_js_1.VersionedTransaction.deserialize(signedTransaction);
+                    const finalTransaction = VersionedTransaction.deserialize(signedTransaction);
                     return finalTransaction;
                 }
                 catch (error) {
                     console.error("Error encountered during transaction signing:", error);
-                    throw new wallet_adapter_base_1.WalletSignTransactionError(error.message);
+                    throw new WalletSignTransactionError(error.message);
                 }
             }
             else {
@@ -150,12 +147,12 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
                         host: window.location.origin,
                         isVersionedTransaction: false,
                     });
-                    const finalTransaction = web3_js_1.Transaction.from(Uint8Array.from(signedTransaction));
+                    const finalTransaction = Transaction.from(Uint8Array.from(signedTransaction));
                     return finalTransaction;
                 }
                 catch (error) {
                     console.error("Error encountered during transaction signing:", error);
-                    throw new wallet_adapter_base_1.WalletSignTransactionError(error.message);
+                    throw new WalletSignTransactionError(error.message);
                 }
             }
         });
@@ -174,7 +171,7 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
     signMessage(message) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._wallet) {
-                throw new wallet_adapter_base_1.WalletNotConnectedError();
+                throw new WalletNotConnectedError();
             }
             try {
                 const signedMessage = yield this._wallet.sendCommand("signMessage", {
@@ -186,9 +183,8 @@ class MoongateWalletAdapter extends wallet_adapter_base_1.BaseMessageSignerWalle
             }
             catch (error) {
                 console.error("Error encountered during message signature:", error);
-                throw new wallet_adapter_base_1.WalletSignMessageError(error.message);
+                throw new WalletSignMessageError(error.message);
             }
         });
     }
 }
-exports.MoongateWalletAdapter = MoongateWalletAdapter;

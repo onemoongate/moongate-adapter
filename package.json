@@ -1,15 +1,15 @@
 {
   "name": "@anishde12020/moongate-adapter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MoonGate Wallet Adapter",
   "main": "./dist/adapter.js",
-  "module": "./dist/adapter.mjs",
+  "module": "./dist/adapter.cjs",
   "types": "./dist/adapter.d.ts",
   "type": "module",
   "exports": {
     ".": {
       "require": "./dist/adapter.js",
-      "import": "./dist/adapter.mjs",
+      "import": "./dist/adapter.cjs",
       "types": "./dist/adapter.d.ts"
     }
   },

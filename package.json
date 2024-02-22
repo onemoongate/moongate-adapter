@@ -1,28 +1,20 @@
 {
   "name": "@anishde12020/moongate-adapter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "MoonGate Wallet Adapter",
   "main": "./dist/adapter.js",
-  "module": "./dist/adapter.cjs",
   "types": "./dist/adapter.d.ts",
   "type": "module",
-  "exports": {
-    ".": {
-      "require": "./dist/adapter.js",
-      "import": "./dist/adapter.cjs",
-      "types": "./dist/adapter.d.ts"
-    }
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup src/adapter.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/adapter.ts --format esm --dts --clean",
     "dev": "npm run build -- --watch src",
     "prepublishOnly": "npm run build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@anishde12020/moongate-solana-wallet-sdk": "^1.0.2"
+    "@anishde12020/moongate-solana-wallet-sdk": "^1.0.3"
   },
   "peerDependencies": {
     "@solana/wallet-adapter-base": "^0.9.23",

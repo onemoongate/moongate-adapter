@@ -27,7 +27,7 @@ import {
   TransactionVersion,
 } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
-import { MoonGateEmbed } from "@anishde12020/moongate-solana-wallet-sdk";
+import { MoonGateEmbed } from "@moongate/solana-wallet-sdk";
 export const MoongateWalletName = "Ethereum Wallet" as WalletName<"MoonGate">;
 
 export class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {

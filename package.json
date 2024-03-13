@@ -1,6 +1,6 @@
 {
   "name": "@moongate/moongate-adapter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MoonGate Wallet Adapter",
   "main": "./dist/adapter.js",
   "types": "./dist/adapter.d.ts",

@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@moongate/solana-wallet-sdk": "^2.0.0"
+    "@moongate/solana-wallet-sdk": "^2.0.1"
   },
   "peerDependencies": {
     "@solana/wallet-adapter-base": "^0.9.23",

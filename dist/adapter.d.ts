@@ -10,10 +10,12 @@ declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     private _connecting;
     private _wallet;
     private _position;
+    private _authMode;
     private _publicKey;
     private _readyState;
     constructor(config?: {
         position?: string;
+        authMode?: string;
     });
     get publicKey(): PublicKey | null;
     get connecting(): boolean;

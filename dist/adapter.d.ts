@@ -22,6 +22,7 @@ declare class MoongateWalletAdapter extends BaseMessageSignerWalletAdapter {
     get connected(): boolean;
     get readyState(): WalletReadyState;
     connect(): Promise<void>;
+    private _handleMessage;
     disconnect(): Promise<void>;
     sendTransaction<T extends Transaction | VersionedTransaction>(transaction: T, connection: Connection, options?: SendTransactionOptions): Promise<TransactionSignature>;
     signTransaction<T extends Transaction | VersionedTransaction>(transaction: T): Promise<T>;

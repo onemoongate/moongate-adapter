@@ -52,6 +52,9 @@ var MoongateWalletAdapter = class extends BaseMessageSignerWalletAdapter {
     this._connecting = false;
     this._wallet = null;
     this._publicKey = null;
+    if (typeof window !== "undefined") {
+      window.addEventListener("message", this._handleMessage.bind(this));
+    }
     if (config == null ? void 0 : config.position) {
       this._position = config.position;
     }
@@ -113,6 +116,16 @@ var MoongateWalletAdapter = class extends BaseMessageSignerWalletAdapter {
       }
     });
   }
+  _handleMessage(event) {
+    return __async(this, null, function* () {
+      if (event.data && event.data.type === "moongate") {
+        const { command } = event.data;
+        if (command === "disconnect") {
+          yield this.disconnect();
+        }
+      }
+    });
+  }
   disconnect() {
     return __async(this, null, function* () {
       var _a;
@@ -120,6 +133,7 @@ var MoongateWalletAdapter = class extends BaseMessageSignerWalletAdapter {
         yield (_a = this._wallet) == null ? void 0 : _a.disconnect();
         this._wallet = null;
         this._publicKey = null;
+        this._connecting = false;
         this.emit("disconnect");
       } catch (error) {
         console.error("Error encountered during disconnection:", error);

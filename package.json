@@ -1,6 +1,6 @@
 {
   "name": "@moongate/moongate-adapter",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "MoonGate Wallet Adapter",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@moongate/solana-wallet-sdk": "^3.0.6",
+    "@moongate/solana-wallet-sdk": "^3.0.8",
     "@solana/wallet-standard-chains": "^1.1.0",
     "@solana/wallet-standard-util": "^1.1.1",
     "@wallet-standard/app": "^1.0.1",

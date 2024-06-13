@@ -3,9 +3,10 @@ import { TransactionVersion, PublicKey, Transaction, VersionedTransaction, Conne
 import { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-standard-features';
 
 type CustomSolanaSignInInput = SolanaSignInInput | (() => Promise<SolanaSignInInput>);
-declare const registerMoonGateWallet: ({ authMode, position, }: {
+declare const registerMoonGateWallet: ({ authMode, logoDataUri, position, }: {
     authMode?: string;
     position?: string;
+    logoDataUri?: string;
 }) => () => void;
 declare const MoongateWalletName: WalletName<"MoonGate">;
 declare class MoongateWalletAdapter2 extends BaseSignInMessageSignerWalletAdapter {
@@ -17,12 +18,14 @@ declare class MoongateWalletAdapter2 extends BaseSignInMessageSignerWalletAdapte
     private _wallet;
     private _position;
     private _authMode;
+    private _logoDataUri;
     private _disconnected;
     private _publicKey;
     private _readyState;
     constructor(config?: {
         position?: string;
         authMode?: string;
+        logoDataUri?: string;
     });
     get publicKey(): PublicKey | null;
     get connecting(): boolean;
